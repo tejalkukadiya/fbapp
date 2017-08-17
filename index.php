@@ -72,7 +72,7 @@ echo $_SESSION['fb_access_token'];
 
 $permissions = ['email','user_photos']; // Optional permissions
 
-$loginUrl = $helper->getLoginUrl('http://localhost/facebook_login_with_php/fb-profile-fetch/', $permissions);
+// $loginUrl = $helper->getLoginUrl('http://localhost/facebook_login_with_php/fb-profile-fetch/', $permissions);
 $loginUrl = $helper->getLoginUrl('http://fbprofilefatch.azurewebsites.net/', $permissions);
 
 ?>
@@ -87,10 +87,12 @@ $loginUrl = $helper->getLoginUrl('http://fbprofilefatch.azurewebsites.net/', $pe
                   echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
 
               }else{
+                $response=$fb->get('/me/?fields=name,picture,email',$_SESSION['fb_access_token']);
+                $data=$response->getGraphNode();
             ?>
 
           <div class="col-md-3">
-          <img src="" height="180px" width="180px">
+          <img src="<?php echo $data['picture']['url']; ?>" height="180px" width="180px">
           </div>
           <div class="profile col-md-9">
           <h2> User Profile</h2>
@@ -102,7 +104,7 @@ $loginUrl = $helper->getLoginUrl('http://fbprofilefatch.azurewebsites.net/', $pe
 
 
            echo $data['name']; ?> </h4>
-          <h4> <span>email id:</span>  Tejal@Kukadiya </h4>
+          <h4> <span>email id:</span> <?php  echo $data['email']?></h4>
           <h4> <span>place :</span>  Tejal Kukadiya </h4>
           </div>
       </div>
