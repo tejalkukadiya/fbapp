@@ -72,7 +72,7 @@ echo $_SESSION['fb_access_token'];
 
 $permissions = ['email','user_photos']; // Optional permissions
 
-// $loginUrl = $helper->getLoginUrl('http://localhost/facebook_login_with_php/fb-profile-fetch/', $permissions);
+// $loginUrl = $helper->getLoginUrl('http://localhost/fbapp/', $permissions);
 $loginUrl = $helper->getLoginUrl('http://fbprofilefatch.azurewebsites.net/', $permissions);
 
 ?>
@@ -98,11 +98,11 @@ $loginUrl = $helper->getLoginUrl('http://fbprofilefatch.azurewebsites.net/', $pe
           <h2> User Profile</h2>
           <hr>
           <h4> <span>Name:</span> <?php
-            $response = $fb->get('/me/?fields=name',$_SESSION['fb_access_token']);
-            $data=$response->getGraphNode();
+            
+            
             // echo "<br/>";
 
-
+           
            echo $data['name']; ?> </h4>
           <h4> <span>email id:</span> <?php  echo $data['email']?></h4>
           <h4> <span>place :</span>  Tejal Kukadiya </h4>
@@ -118,20 +118,39 @@ $loginUrl = $helper->getLoginUrl('http://fbprofilefatch.azurewebsites.net/', $pe
      <div id="msg">
        
      </div>
-    </div>
+    
   <?php
-  }
+  		$response = $fb->get('/me/?fields=albums');
+        $data1=$response->getGraphNode();
+  
+      foreach ( $data1['albums'] as $key ) {
+          
+           echo '
+            <div class="profile-albums">
+               <h2> '.$key['name'].'</h2>
+               <hr>
+               <div class="row">
+                
+
+                  ';
+                	$id=$key['id'];
+                   $response = $fb->get('/'.$id.'/photos/?fields=source,name,image',$token);
+                   $data2=$response->getGraphEdge();
+                   foreach ($data2 as $key) {
+
+                   	// $imageurl[$i]=$key['source'];
+                   	// $i++;
+                      echo '<div class="col-md-4"> <img src="'.$key['source'].'">
+                    	 </div>';
+                 }
+                 echo ";
+               </div>
+             </div>";
+	          }
+
+
+}
   ?>
-      <div class="row">
-        <div class="col-md-4">
-          <img src="" height="250px" width="250px">
-        </div>
-        <div class="col-md-4">
-          <img src="" height="250px" width="250px">
-        </div>
-        <div class="col-md-4">
-          <img src="" height="250px" width="250px">
-        </div>
-      </div>
-</body>
+  				</div>
+	          </body>
 </html>
