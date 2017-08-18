@@ -47,6 +47,9 @@ if (isset($_REQUEST['load'])) {
 
 
 if (isset($_REQUEST['down'])) {
+
+
+  echo "Access";
 $access=$_SESSION['fb_access_token'];
 	echo "Processing";
 
